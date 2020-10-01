@@ -1,5 +1,5 @@
-#this is where the code will go.
-#example below
+# this is where the code will go.
+# example below
 
 import dash
 import dash_core_components as dcc
@@ -11,28 +11,28 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
-# assume you have a "long-form" data frame
-# see https://plotly.com/python/px-arguments/ for more options
-df = pd.DataFrame({
-    "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
-    "Amount": [4, 1, 2, 2, 4, 5],
-    "City": ["SF", "SF", "SF", "Montreal", "Montreal", "Montreal"]
-})
+df = pd.read_csv(
+    'https://gist.githubusercontent.com/chriddyp/5d1ea79569ed194d432e56108a04d188/raw/a9f9e8076b837d541398e999dcbac2b2826a81f8/gdp-life-exp-2007.csv')
 
-fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
+fig = px.scatter(df, x="gdp per capita", y="life expectancy",
+                 size="population", color="continent", hover_name="country",
+                 log_x=True, size_max=60)
 
-app.layout = html.Div(children=[
-    html.H1(children='Hello Dash'),
+fig2 = px.scatter(df, x="gdp per capita", y="life expectancy",
+                  size="population", color="continent", hover_name="country",
+                  log_x=True, size_max=60)
 
-    html.Div(children='''
-        Dash: A web application framework for Python.
-    '''),
 
+app.layout = html.Div([
     dcc.Graph(
-        id='example-graph',
+        id='life-exp-vs-gdp',
         figure=fig
-    )
-])
+    ),
+    dcc.Graph(
+        id='life-exp-vs-gdp2zzzzz',
+        figure=fig2
+    ),
 
+])
 if __name__ == '__main__':
     app.run_server(debug=True)
